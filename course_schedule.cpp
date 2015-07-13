@@ -70,7 +70,6 @@ public:
             m_onStack[i] = false;
         }
         m_topOrder.reserve(numCourses);
-        printGraph();
     }
     
     void printGraph() {
