@@ -56,12 +56,23 @@ private:
 
 class Trie {
 public:
-    Trie() {
+    Trie(): m_root(nullptr) {
+        init();
+    }
+    
+    void init() {
+        if (m_root) {
+            delete m_root;
+            m_root = nullptr;
+        }
         m_root = new TrieNode();
     }
 
     // Inserts a word into the trie.
     void insert(string word) {
+        if (!m_root) {
+            init();
+        }
         TrieNode* node = m_root;
         for (size_t i = 0; i < word.size(); ++i) {
             node = node->createChildNode(word[i]);
@@ -71,6 +82,9 @@ public:
 
     // Returns if the word is in the trie.
     bool search(string word) {
+        if (!m_root) {
+            init();
+        }
         TrieNode* node = m_root;
         for (size_t i = 0; i < word.size(); ++i) {
             node = node->getChildNode(word[i]);
@@ -84,6 +98,9 @@ public:
     // Returns if there is any word in the trie
     // that starts with the given prefix.
     bool startsWith(string prefix) {
+        if (!m_root) {
+            init();
+        }
         TrieNode* node = m_root;
         for (size_t i = 0; i < prefix.size(); ++i) {
             node = node->getChildNode(prefix[i]);
