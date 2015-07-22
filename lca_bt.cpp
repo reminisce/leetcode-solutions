@@ -40,7 +40,7 @@ public:
         
         TreeNode* left = lowestCommonAncestorHelper(node->left, p, q);
         TreeNode* right = lowestCommonAncestorHelper(node->right, p, q);
-        if (!left && !right) {
+        if (left && right) {
             return node;
         }
         
