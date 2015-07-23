@@ -1,12 +1,23 @@
+/* 
+ * File:   main.cpp
+ * Author: junwu
+ *
+ * Created on July 6, 2015, 9:29 PM
+ */
+
 #include <cstdlib>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
+/*
+ * 
+ */
 class Solution {
 public:
-    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+
+    int calculateMinimumHP(vector<vector<int>>&dungeon) {
         int min_hp = 1;
         int m = dungeon.size();
         if (m == 0) {
@@ -16,21 +27,21 @@ public:
         if (n == 0) {
             return min_hp;
         }
-        
-        dungeon[m-1][n-1] = (dungeon[m-1][n-1] < 0? 1-dungeon[m-1][n-1] : 1);
-                for (int i = m-2; i >= 0; --i) {
-            dungeon[i][n-1] = (dungeon[i][n-1] >= dungeon[i+1][n-1]? 1 : dungeon[i+1][n-1]-dungeon[i][n-1]);
+
+        dungeon[m - 1][n - 1] = (dungeon[m - 1][n - 1] < 0 ? 1 - dungeon[m - 1][n - 1] : 1);
+        for (int i = m - 2; i >= 0; --i) {
+            dungeon[i][n - 1] = (dungeon[i][n - 1] >= dungeon[i + 1][n - 1] ? 1 : dungeon[i + 1][n - 1] - dungeon[i][n - 1]);
         }
-        for (int j = n-2; j >= 0; --j) {
-            dungeon[m-1][j] = (dungeon[m-1][j] >= dungeon[m-1][j+1]? 1: dungeon[m-1][j+1]-dungeon[m-1][j]);
+        for (int j = n - 2; j >= 0; --j) {
+            dungeon[m - 1][j] = (dungeon[m - 1][j] >= dungeon[m - 1][j + 1] ? 1 : dungeon[m - 1][j + 1] - dungeon[m - 1][j]);
         }
-        for (int i = m-2; i >= 0; --i) {
-            for (int j = n-2; j >= 0; --j) {
-                min_hp = std::min(dungeon[i+1][j], dungeon[i][j+1]);
-                dungeon[i][j] = (dungeon[i][j] >= min_hp? 1 : min_hp-dungeon[i][j]);
+        for (int i = m - 2; i >= 0; --i) {
+            for (int j = n - 2; j >= 0; --j) {
+                min_hp = std::min(dungeon[i + 1][j], dungeon[i][j + 1]);
+                dungeon[i][j] = (dungeon[i][j] >= min_hp ? 1 : min_hp - dungeon[i][j]);
             }
         }
-        
+
         return dungeon[0][0];
     }
 };
@@ -51,9 +62,9 @@ int main(int argc, char** argv) {
     dungeon[2][0] = 10;
     dungeon[2][1] = 30;
     dungeon[2][2] = -5;
-    
+
     Solution solution;
     cout << solution.calculateMinimumHP(dungeon) << endl;
-    
+
     return 0;
 }
