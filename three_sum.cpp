@@ -19,6 +19,10 @@ public:
         
         int n = nums.size();
         std::sort(nums.begin(), nums.end());
+        if (nums.front() > 0 || nums.back() < 0) {
+            return res;
+        }
+        
         for (size_t i = 0; i < n-2;) {
             int l = i + 1;
             int r = n - 1;
