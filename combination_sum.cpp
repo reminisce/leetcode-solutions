@@ -27,7 +27,7 @@ public:
         }
 
         for (int i = curIdx; i < candidates.size(); ++i) {
-            if (i <= (int)candidates.size()-1 && candidates[i] == candidates[i+1]) {
+            if (i > curIdx && candidates[i] == candidates[i-1]) {
                 continue;
             }
             if (candidates[i] <= target) {
