@@ -1,79 +1,63 @@
-#include <cstdlib>
-#include <deque>
 #include <vector>
+#include <deque>
 #include <iostream>
 
 using namespace std;
 
-/* Put the largest number's index of the current window
- * at the front of the queue and remove the numbers from
- * the queue when they are less than the next number in
- * the array.
- */
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        vector<int> res;
-        int n = nums.size();
-        if (k == 0 || n == 0) {
-            return res;
+        vector<int> result;
+        if (k <= 0 || nums.empty()) {
+            return result;
         }
-        
-        res.resize(n-k+1);
-        deque<int> q;
-        
-        for (int i = 0; i < k; ++i) {
-            // Remove the numbers from the queue that are
-            // less than the current number. Since the current
-            // number stays longer than its previous numbers
-            // in the sliding window. Removing previous numbers
-            // will not cause any problems.
-            while (!q.empty() && nums[i] > nums[q.back()]) {
-                q.pop_back();
-            }
-            q.push_back(i);
+
+        deque<int> windowCache; // stores the candidates' indices
+        size_t maxNumIdx = 0; // max value's index per window
+        if (k > nums.size()) {
+            return result;
         }
-        
-        for (int i = k; i < nums.size(); ++i) {
-            res[i-k] = nums[q.front()];
-            // Remove the numbers from the queue that are
-            // less than the current number. Since the current
-            // number stays longer than its previous numbers
-            // in the sliding window. Removing previous numbers
-            // will not cause any problems.
-            while (!q.empty() && nums[i] > nums[q.back()]) {
-                q.pop_back();
+
+        result.resize((int)nums.size()-k+1);
+        // start to move sliding window
+        for (size_t i = 0; i < k; ++i) {
+            while (!windowCache.empty() && nums[i] >= nums[windowCache.back()]) {
+                windowCache.pop_back();
             }
-            // Remove the numbers that will be out of the next
-            // sliding window
-            while (!q.empty() && q.front() <= i-k) {
-                q.pop_front();
-            }
-            q.push_back(i);
+            windowCache.push_back(i);
         }
-        res[n-k] = nums[q.front()];
+        result[0] = nums[windowCache.front()];
+        while (!windowCache.empty() && windowCache.front() <= 0) {
+            windowCache.pop_front();
+        }
+
+
+        for (size_t i = 1; i <= (int)nums.size()-k; ++i) {
+            // pop out indices whose numbers are less than the new value just into the window
+            int j = i + k - 1;
+            while (!windowCache.empty() && nums[j] >= nums[windowCache.back()]) {
+                windowCache.pop_back();
+            }
+            windowCache.push_back(j);
+            
+            result[i] = nums[windowCache.front()];
+            // pop out indices that are out of the next sliding window
+            while (!windowCache.empty() && windowCache.front() <= i) {
+                windowCache.pop_front();
+            }
+        }
+
+        return result;
     }
 };
 
-int main(int argc, char** argv) {
-    // Given nums = [1,3,-1,-3,5,3,6,7], and k = 3.
-    vector<int> nums;
-    nums.push_back(1);
-    nums.push_back(3);
-    nums.push_back(-1);
-    nums.push_back(-3);
-    nums.push_back(5);
-    nums.push_back(3);
-    nums.push_back(6);
-    nums.push_back(7);
-    int k = 3;
+int main()
+{
+    vector<int> nums = { 1, -1 };
+    int k = 1;
     Solution sol;
     vector<int> res = sol.maxSlidingWindow(nums, k);
-    
-    for (size_t i = 0; i < res.size(); ++i) {
-        cout << "Max number of sliding window " << i << ": " << res[i] << endl;
-    }
-    
     return 0;
 }
+
 
