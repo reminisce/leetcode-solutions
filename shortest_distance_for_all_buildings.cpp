@@ -53,9 +53,20 @@ public:
             row.resize(n, 0);
         }
 
+        // This matrix stores the number
+        // of buildings that from one
+        // element can reach
+        vector<vector<int>> numBldgs;
+        numBldgs.resize(m);
+        for (vector<int>& row : numBldgs) {
+            row.resize(n, 0);
+        }
+
+        int totalNumBldgs = 0; // count the total number of buildings in the grid
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (grid[i][j] == 1) { // It's a building                    
+                    ++totalNumBldgs;
                     // start to do BFS to fill in dist
                     resetVisited(visited);
                     queue<pair<int, int>> q;
@@ -74,6 +85,7 @@ public:
                             if (grid[c1][c2] == 0 && visited[c1][c2] == 0) {
                                 visited[c1][c2] = 1;
                                 dist[c1][c2] += curBFSLevel;
+                                ++numBldgs[c1][c2];
                             }
                         }
                         ++curBFSLevel;
@@ -83,16 +95,16 @@ public:
         } 
 
         // find the min distance
-        int minDist = m * n;
-        for (vector<int>& row : dist) {
-            for (int d : row) {
-                if (d > 0) {
-                    minDist = min(minDist, d);
+        int minDist = m * n + 1;
+        for (size_t i = 0; i < dist.size(); ++i) {
+            for (size_t j = 0; j < dist[i].size(); ++j) {
+                if (dist[i][j] > 0 && numBldgs[i][j] == totalNumBldgs) {
+                    minDist = min(minDist, dist[i][j]);
                 } 
             }
         }
 
-        return minDist;
+        return (minDist == m*n+1)? -1 : minDist;
     }
 
     void addNeighbor(const vector<vector<int>>& grid, const vector<vector<int>>& visited, queue<pair<int, int>>& q, int r, int c) {
@@ -123,6 +135,7 @@ int main()
 
     grid[0][0] = 1;
     grid[0][2] = 2;
+    grid[0][3] = 2;
     grid[0][4] = 1;
     grid[2][2] = 1;
     Solution sol;
