@@ -38,6 +38,38 @@ public:
 
     	return maxSum;
     }
+
+    /**
+     * Consider the max subarray sum ending at
+     * each nums[i]. The curMax depends on:
+     * 1. curMax + nums[i]
+     * 2. nums[i]
+     * Each time, update final maxSum by comparing
+     * with curMax.
+     */
+    int maxSubArray2(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+
+        if (nums.size() == 1) {
+            return nums[0];
+        }
+
+        int curMax = nums[0];
+        int maxSum = curMax;
+        for (size_t i = 1; i < nums.size(); ++i) {
+            if (curMax < 0) {
+                curMax = nums[i];
+            } else {
+                curMax += nums[i];
+            }
+
+            maxSum = max(curMax, maxSum);
+        }
+
+        return maxSum;
+    }
 };
 
 int main()
