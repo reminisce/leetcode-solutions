@@ -57,7 +57,7 @@ public:
         return rs;
     }
 
-    void subsetsRecursion(vector<int>& nums, vector<vector<int>>& rs, vector<int> subset, int index) {
+    void subsetsRecursion(vector<int>& nums, vector<vector<int>>& rs, vector<int>& subset, int index) {
         if (index == nums.size()) { // Last subset is itself
             rs.push_back(subset);
             return;
@@ -69,6 +69,7 @@ public:
         // include nums[index]
         subset.push_back(nums[index]);
         subsetsRecursion(nums, rs, subset, index+1);
+        subset.pop_back();
     }
 
     vector<vector<int>> subsets3(vector<int>& nums) {
