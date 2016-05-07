@@ -53,23 +53,18 @@ public:
         vector<vector<int>> rs;
         sort(nums.begin(), nums.end());
         vector<int> subset;
+        rs.push_back(subset);
         subsetsRecursion(nums, rs, subset, 0);
         return rs;
     }
 
     void subsetsRecursion(vector<int>& nums, vector<vector<int>>& rs, vector<int>& subset, int index) {
-        if (index == nums.size()) { // Last subset is itself
+        for (int i = index; i < nums.size(); ++i) {
+            subset.push_back(nums[i]);
             rs.push_back(subset);
-            return;
+            subsetsRecursion(nums, rs, subset, i+1);
+            subset.pop_back();
         }
-
-        // not include nums[index]
-        subsetsRecursion(nums, rs, subset, index+1);
-
-        // include nums[index]
-        subset.push_back(nums[index]);
-        subsetsRecursion(nums, rs, subset, index+1);
-        subset.pop_back();
     }
 
     vector<vector<int>> subsets3(vector<int>& nums) {
