@@ -17,43 +17,14 @@ using namespace std;
 class Solution {
 public:
     /**
-     * Scan from end to begin, when see a zero, move the closest left
-     * non-zero to that position.
+     * Move all the zeros to the end of the array.
+     * The idea is scanning from the beginning,
+     * and count the number of zeros. This number means
+     * the index difference between the current index
+     * and the index of the first zero. So we can
+     * easily swap them if nums[i] != 0.
      */
     void moveZeroes(vector<int>& nums) {
-        if (nums.empty()) {
-            return;
-        }
-
-        int curZeroIdx = 0;
-        int curNonZeroIdx = curZeroIdx;
-        int n = nums.size();
-        while (true) {
-            while (curZeroIdx < n && nums[curZeroIdx] != 0) {
-                ++curZeroIdx;
-            }
-
-            if (curZeroIdx >= n-1) { // No zeroes or only the last is zero
-                return;
-            }
-
-            curNonZeroIdx = max(curNonZeroIdx, curZeroIdx + 1);
-            while (curNonZeroIdx < n && nums[curNonZeroIdx] == 0) {
-                ++curNonZeroIdx;
-            }
-
-            if (curNonZeroIdx >= n) { // all zeroes
-                return;
-            }
-
-            nums[curZeroIdx] = nums[curNonZeroIdx];
-            nums[curNonZeroIdx] = 0;
-            ++curZeroIdx;
-            ++curNonZeroIdx;
-        }
-    }
-
-    void moveZeroes2(vector<int>& nums) {
         int count = 0;
         for (int i = 0; i < (int)nums.size(); ++i) {
             if (nums[i] == 0) {
@@ -63,6 +34,21 @@ public:
             }
         }
     }
+
+    /**
+     * Move all the zeros to the begining of the array.
+     * Similar idea. Scanning from the end of the array.
+     */
+     void moveZeroes2Front(vector<int>& nums) {
+        int count = 0;
+        for (int i = (int)nums.size()-1; i >= 0; --i) {
+            if (nums[i] == 0) {
+                ++count;
+            } else {
+                swap(nums[i], nums[i+count]);
+            }
+        }
+     }
 };
 
 int main()
