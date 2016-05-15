@@ -32,6 +32,28 @@ public:
         if (nums.empty()) {
             return -1;
         }
+        int left = 0, right = (int)nums.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (target <= nums[mid]) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        if (nums[right] != target) return -1;
+        return right;
+    }
+
+    /**
+     * Search for the left most index whose element is
+     * equal or greater than the target
+     */
+    int searchLeft2(vector<int>& nums, int target) {
+        if (nums.empty()) {
+            return -1;
+        }
         int l = 0, r = (int)nums.size()-1;
         while (l <= r) {
             int mid = l + (r - l) / 2;
@@ -73,8 +95,8 @@ public:
 
 int main()
 {
-    vector<int> nums = {1, 5};
-    int target = 4;
+    vector<int> nums = {3, 4};
+    int target = 2;
     Solution sol;
     vector<int> rs = sol.searchRange(nums, target);
     for (int val : rs) {
