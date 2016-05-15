@@ -18,10 +18,31 @@ using namespace std;
 
 class Solution {
 public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int sum = 0;
+        int start = -1;
+        int minLen = 0;
+        for (int i = 0; i < (int)nums.size(); ++i) {
+            if (nums[i] >= s) {
+                return 1;
+            }
+            sum += nums[i];
+            while (sum >= s) {
+                if (minLen == 0) {
+                    minLen = i - start;
+                } else {
+                    minLen = min(minLen, i - start);
+                }
+                sum -= nums[++start];
+            }
+        }
+        return minLen;
+    }
+
     /**
      * O(N) time, sliding window
      */
-    int minSubArrayLen(int s, vector<int>& nums) {
+    int minSubArrayLen2(int s, vector<int>& nums) {
         if (nums.empty()) return 0;
         int curSum = 0;
         int left = 0;
@@ -60,8 +81,7 @@ Solution2:
 Allocate an array storing the sum[0,...,i] for i = 0,...,nums.size()-1.
 It's in ascending order. Loop through the array, for each element sum[i],
 find the lower bound index j, such that sum[j] >= sum[i] + s. Then,
-the window's length for sum[i] is j - i + 1. Keep updating the window length
-while looping through the partial sum array.
+the window's length for sum[i] is j - i + 1.
 */
 
 int main()
