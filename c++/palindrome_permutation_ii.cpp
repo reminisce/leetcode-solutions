@@ -59,17 +59,26 @@ public:
         }
 
         for (int i = index; i < str.size(); ++i) {
-            if (i > index && str[i] == str[index]) continue;
+            if (i > index && hasDuplicate(str, index, i, str[i])) continue;
             swap(str[i], str[index]);
             permute(str, index+1, mid, strs);
             swap(str[i], str[index]);
         }
     }
+
+    bool hasDuplicate(const string& str, int start, int end, char target) {
+        for (int i = start; i < end; ++i) {
+            if (str[i] == target) {
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 int main()
 {
-    string str = "aabbb";
+    string str = "aaaab";
     Solution sol;
     vector<string> strs = sol.generatePalindromes(str);
     for (string& str : strs) {

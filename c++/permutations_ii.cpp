@@ -16,12 +16,42 @@ class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         vector<vector<int>> rs;
+        //sort(nums.begin(), nums.end());
+        permute(nums, 0, rs);
+        return rs;
+    }
+
+    void permute(vector<int>& p, int start, vector<vector<int>>& res) {
+        if (start == p.size()) {
+            res.push_back(p);
+            return;
+        }
+
+        for (int i = start; i < p.size(); ++i) {
+            if (i > start && hasDuplicate(p, start, i, p[i])) continue;
+            swap(p[i], p[start]);
+            permute(p, start+1, res); // note it's start+1, not i+1
+            swap(p[i], p[start]);
+        }
+    }
+
+    bool hasDuplicate(vector<int>& nums, int start, int end, int target) {
+        for (int i = start; i < end; ++i) {
+            if (nums[i] == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    vector<vector<int>> permuteUnique2(vector<int>& nums) {
+        vector<vector<int>> rs;
         if (nums.empty()) return rs;
         vector<int> visited(nums.size(), 0);
         vector<int> p;
         p.reserve(nums.size());
         sort(nums.begin(), nums.end());
-        permute(nums, rs, p, visited);
+        permute2(nums, rs, p, visited);
         return rs;
     }
 
@@ -32,7 +62,7 @@ public:
      * is not visited as this situation has already been considered in the previous
      * for loop.
      */
-    void permute(vector<int>& nums, vector<vector<int>>& rs, vector<int>& p, vector<int>& visited) {
+    void permute2(vector<int>& nums, vector<vector<int>>& rs, vector<int>& p, vector<int>& visited) {
         if (p.size() == nums.size()) {
             rs.push_back(p);
             return;
@@ -43,7 +73,7 @@ public:
                 if (i > 0 && nums[i] == nums[i-1] && visited[i-1] == 0) continue;
                 p.push_back(nums[i]);
                 visited[i] = 1;
-                permute(nums, rs, p, visited);
+                permute2(nums, rs, p, visited);
                 visited[i] = 0;
                 p.pop_back();
             }
@@ -53,7 +83,7 @@ public:
 
 int main()
 {
-    vector<int> nums = {1, 2, 1};
+    vector<int> nums = {1, 2, 2};
     Solution sol;
     vector<vector<int>> rs = sol.permuteUnique(nums);
     for (vector<int>& r : rs) {
