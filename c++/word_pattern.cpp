@@ -14,12 +14,34 @@ pattern = "abba", str = "dog dog dog dog" should return false.
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <sstream>
 
 using namespace std;
 
 class Solution {
 public:
     bool wordPattern(string pattern, string str) {
+        unordered_map<char, int> charMap;
+        unordered_map<string, int> stringMap;
+        istringstream in(str);
+
+        int i = 0;
+        for (string word; in >> word; ++i) {
+            auto it1 = charMap.find(pattern[i]);
+            auto it2 = stringMap.find(word);
+            if (it1 != charMap.end() && it2 != stringMap.end()) {
+                if (it1->second != it2->second) return false;
+            } else if (it1 == charMap.end() && it2 == stringMap.end()) {
+                charMap[pattern[i]] = stringMap[word] = i + 1;
+            } else {
+                return false;
+            }
+        }
+
+        return i == (int)pattern.size();
+    }
+
+    bool wordPattern2(string pattern, string str) {
         if (pattern.empty() && str.empty()) {
             return true;
         }
