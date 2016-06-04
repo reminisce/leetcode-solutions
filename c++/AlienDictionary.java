@@ -106,7 +106,7 @@ public class AlienDictionary {
     private void buildDigraph(ArrayList<ArrayList<Character>> dependencyList,
                               HashMap<Character, ArrayList<Character>> digraph) {
         if (null == dependencyList) return;
-        if (null == digraph) digraph = new HashMap<>();
+        if (null == digraph) return;
         for (ArrayList<Character> pair : dependencyList) {
             if (!digraph.containsKey(pair.get(0))) {
                 digraph.put(pair.get(0), new ArrayList<>());
@@ -116,9 +116,7 @@ public class AlienDictionary {
     }
 
     private void buildCharacterSet(String[] words, HashSet<Character> characterSet) {
-        if (characterSet == null) {
-            characterSet = new HashSet<>();
-        }
+        if (characterSet == null) return;
         for (String word : words) {
             for (int i = 0; i < word.length(); ++i) {
                 characterSet.add(word.charAt(i));
@@ -127,9 +125,7 @@ public class AlienDictionary {
     }
 
     private void buildDependencyList(String[] words, ArrayList<ArrayList<Character>> dependencyList) {
-        if (dependencyList == null) {
-            dependencyList = new ArrayList<>();
-        }
+        if (dependencyList == null) return;
         for (int i = 0; i < words.length-1; ++i) {
             int j = 0;
             while (j < words[i].length() && j < words[i+1].length() && words[i].charAt(j) == words[i+1].charAt(j)) ++j;
