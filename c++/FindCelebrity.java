@@ -83,27 +83,12 @@ public class FindCelebrity {
      */
     public int findCelebrity(int n, boolean[][] knows) {
         this.knows = knows;
-        // push n people into a stack
-        Stack<Integer> stack = new Stack<>();
+        int candidate = 0;
         for (int i = 0; i < n; ++i) {
-            stack.push(i);
-        }
-
-        while (stack.size() > 1) {
-            int candidate1 = stack.peek();
-            stack.pop();
-            int candidate2 = stack.peek();
-            stack.pop();
-            if (knows(candidate1, candidate2)) {
-                stack.push(candidate2);
-            } else {
-                stack.push(candidate1);
+            if (knows(candidate, i)) {
+                candidate = i;
             }
         }
-
-        // Found a candidate
-        int candidate = stack.peek();
-        stack.pop();
 
         // Verify the candidate
         for (int i = 0; i < n; ++i) {
