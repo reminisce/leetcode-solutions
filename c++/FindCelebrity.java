@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 /**
  * Created on 6/1/16.
  * Given n people at a party with id 0, 1,..., n-1, find the celebrity if there is one.
