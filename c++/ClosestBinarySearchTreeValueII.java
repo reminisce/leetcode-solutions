@@ -44,6 +44,7 @@ public class ClosestBinarySearchTreeValueII {
     public List<Integer> closestKValues(TreeNode root, double target, int k) {
         List<Integer> res = new LinkedList<>();
         if (null == root) return res;
+        return res;
     }
 
     private void closestKValuesHelper(TreeNode node, double target, int k, List<Integer> res) {
