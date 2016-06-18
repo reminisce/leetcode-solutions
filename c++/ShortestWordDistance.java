@@ -51,7 +51,7 @@ public class ShortestWordDistance {
         int minDistance = words.length;
         for (int i = 0; i < words.length; ++i) {
             if (words[i].equals(word1) || words[i].equals(word2)) {
-                if (idx > 0 && !words[idx].equals(words[i])) {
+                if (idx >= 0 && !words[idx].equals(words[i])) {
                     minDistance = Math.min(minDistance, Math.abs(i - idx));
                 }
                 idx = i;
