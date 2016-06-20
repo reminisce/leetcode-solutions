@@ -30,22 +30,34 @@ public class PalindromePartitioning {
     public List<List<String>> partition(String s) {
         List<List<String>> res = new ArrayList<>();
         List<String> palindromes = new ArrayList<>();
-        partitionHelper(s, 0, palindromes, res);
+        boolean[][] isPalindrome = new boolean[s.length()][s.length()];
+        populateIsPalindromeCache(s, isPalindrome);
+        partitionHelper(s, 0, isPalindrome, palindromes, res);
         return res;
     }
 
-    private void partitionHelper(String s, int start, List<String> palindromes, List<List<String>> res) {
+    private void partitionHelper(String s, int start, boolean[][] isPalindrome, List<String> palindromes, List<List<String>> res) {
         if (start == s.length()) {
             res.add(new ArrayList<>(palindromes));
             return;
         }
 
         for (int i = start; i < s.length(); ++i) {
-            String str = s.substring(start, i+1);
-            if (isPalindrome(str)) {
+            if (isPalindrome[start][i]) {
+                String str = s.substring(start, i+1);
                 palindromes.add(str);
-                partitionHelper(s, i+1, palindromes, res);
+                partitionHelper(s, i+1, isPalindrome, palindromes, res);
                 palindromes.remove(palindromes.size()-1);
+            }
+        }
+    }
+
+    private void populateIsPalindromeCache(String s, boolean[][] isPal) {
+        for (int j = 0; j < s.length(); ++j) {
+            for (int i = 0; i <= j; ++i) {
+                if (s.charAt(i) == s.charAt(j) && (j-i <= 1 || isPal[i+1][j-1])) {
+                    isPal[i][j] = true;
+                }
             }
         }
     }
