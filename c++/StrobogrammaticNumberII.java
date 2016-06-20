@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created on 6/5/16.
@@ -19,57 +21,69 @@ public class StrobogrammaticNumberII {
 
     public static void main(String[] args) {
         StrobogrammaticNumberII app = new StrobogrammaticNumberII();
-        List<String> res = app.findStrobogrammatic(5);
+        //List<String> res = app.findStrobogrammatic(3);
+        List<String> res = app.findStrobogrammaticIterative(5);
         for (String str : res) {
             System.out.println(str);
         }
     }
 
     public List<String> findStrobogrammatic(int n) {
-        char[] nums = {'0', '1', '6', '8', '9'};
         List<String> res = new ArrayList<>();
-        findStrobogrammatic(0, n, nums, "", res);
+        if (n % 2 == 0) {
+            findStrobogrammaticHelper(n, "", res);
+        } else {
+            findStrobogrammaticHelper(n, "0", res);
+            findStrobogrammaticHelper(n, "1", res);
+            findStrobogrammaticHelper(n, "8", res);
+        }
         return res;
     }
 
-    /**
-     * Build the string of the left half (with mid char if n is odd) recursively.
-     * [Similar problem: Given 01*1*, where * can be 0 or 1, find all the strings
-     * that match this pattern.]
-     * Then reverse the left half (excluding the mid char) and concatenate
-     * the left half with the reversed string.
-     * @param start
-     * @param n
-     * @param nums
-     * @param str
-     * @param res
-     */
-    private void findStrobogrammatic(int start, int n, char[] nums, String str, List<String> res) {
-        int halfLength = (n % 2 == 0? n/2 : n/2 + 1);
-        if (str.length() == halfLength) {
-            int lastIdx = (n%2 == 1? str.length()-2 : str.length()-1);
-            StringBuilder s = new StringBuilder(str);
-            for (int i = lastIdx; i >= 0; --i) {
-                if (str.charAt(i) == '6') {
-                    s.append('9');
-                } else if (str.charAt(i) == '9') {
-                    s.append('6');
-                } else {
-                    s.append(str.charAt(i));
-                }
+    private void findStrobogrammaticHelper(int n, String str, List<String> res) {
+        if (str.length() == n) {
+            if (n == 1 || str.charAt(0) != '0') {
+                res.add(str);
             }
-            res.add(s.toString());
             return;
         }
 
-        for (int i = start; i < halfLength; ++i) {
-            for (int j = 0; j < nums.length; ++j) {
-                // The leftmost digit cannot be 0 if n > 1.
-                if (i == 0 && nums[j] == '0' && n > 1) continue;
-                // The mid digit cannot be 6 or 9.
-                if (n%2 == 1 && i == n/2 && (nums[j] == '6' || nums[j] == '9')) continue;
-                findStrobogrammatic(i+1, n, nums, str + nums[j], res);
+        findStrobogrammaticHelper(n, "0" + str + "0", res);
+        findStrobogrammaticHelper(n, "1" + str + "1", res);
+        findStrobogrammaticHelper(n, "6" + str + "9", res);
+        findStrobogrammaticHelper(n, "8" + str + "8", res);
+        findStrobogrammaticHelper(n, "9" + str + "6", res);
+    }
+
+    public List<String> findStrobogrammaticIterative(int n) {
+        Queue<String> queue = new LinkedList<>();
+        if (n % 2 == 0) {
+            queue.offer("");
+        } else {
+            queue.offer("0");
+            queue.offer("1");
+            queue.offer("8");
+        }
+
+        while (queue.peek().length() < n) {
+            int size = queue.size();
+            for (int i = 0; i < size; ++i) {
+                String str = queue.poll();
+                queue.offer("0" + str + "0");
+                queue.offer("1" + str + "1");
+                queue.offer("6" + str + "9");
+                queue.offer("8" + str + "8");
+                queue.offer("9" + str + "6");
             }
         }
+
+        List<String> res = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            String str = queue.poll();
+            if (n > 1 && str.charAt(0) == '0') continue;
+            res.add(str);
+        }
+
+        return res;
     }
 }
