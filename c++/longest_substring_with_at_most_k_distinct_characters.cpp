@@ -26,56 +26,36 @@ public:
      * is equal to k.
      */
     int longestSubstring(const string& str, int k) {
-        if (str.empty() || k <= 0) {
-            return 0;
-        }
-        int maxLength = 1;
-        int wl = 0, wr = 0; // window left and right
-        unordered_map<char, int> charMap;
-        int i = 0; // window's left index
-        int j = 0; // window's right index
-        while (j < str.size()) {
-            auto it = charMap.find(str[j]);
-            if (it != charMap.end()) {
-                ++(it->second);
-            } else if (charMap.size() < k) {
-                charMap[str[j]] = 1;
+        if (k < 1) return 0;
+        unordered_map<char, int> charCountMap;
+        int left = 0;
+        int right = left;
+        int maxLen = 1;
+        while (right < str.size()) {
+            auto it = charCountMap.find(str[right]);
+            if (it != charCountMap.end()) {
+                ++it->second;
             } else {
-                while (i < j) {
-                    auto it1 = charMap.find(str[i]); 
-                    if (it1->second > 1) {
-                        --(it1->second);
-                        ++i;
-                    } else {
-                        charMap.erase(it1);
-                        charMap[str[j]] = 1;
-                        ++i;
-                        break;
-                    }
-                }
+                charCountMap[str[right]] = 1;
             }
 
-            // debug
-            if (j-i+1 > maxLength) {
-                wl = i;
-                wr = j;
+            while (charCountMap.size() > k) {
+                it = charCountMap.find(str[left++]);
+                if (it->second == 1) charCountMap.erase(it);
+                else it->second--;
             }
-            // end of debug
 
-            maxLength = max(maxLength, j-i+1);
-            ++j;
+            maxLen = max(maxLen, right - left + 1);
+            ++right;
         }
-
-        cout << "Longest substring with " << k << " different characters is " << str.substr(wl, maxLength) << endl;
-
-        return maxLength;
+        return maxLen;
     }
 };
 
 int main()
 {
-    string str = "ecebaaeeedeebbbb";
-    int k = 5;
+    string str = "ecebaaaaaaaccccccdbbbbb";
+    int k = 2;
     Solution sol;
     int length = sol.longestSubstring(str, k);
     cout << "Length = " << length << endl;
