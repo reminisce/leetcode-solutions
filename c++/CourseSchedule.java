@@ -76,6 +76,7 @@ public class CourseSchedule {
     private boolean dfs(HashMap<Integer, HashSet<Integer>> graph, boolean[] visited,
                         boolean[] onStack, int curCourse) {
         if (!graph.containsKey(curCourse)) return true;
+        if (visited[curCourse]) return true;
         if (onStack[curCourse]) return false;
         visited[curCourse] = true;
         onStack[curCourse] = true;
