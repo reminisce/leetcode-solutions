@@ -99,6 +99,15 @@ public class CountOfRangeSum {
             if (s[i-1] != s[i]) s[++lastIdx] = s[i];
         }
 
+        /**
+         * We need to find the number of i's such that
+         * lower + s[j] <= s[i] <= upper + s[j] for
+         * 0 <= j < i <= n-1. Hence, we scan s[0,...n-1]
+         * from end to begin, each time update the tree
+         * with s[i], and then find the number of nodes
+         * satisfying [s[i-1]+lower, s[i-1]+upper]. We
+         * accumulate this number and return it as the result.
+         */
         int res = 0;
         SegmentTree tree = new SegmentTree(s, 0, lastIdx);
         for (int i = nums.length-1; i >= 0; --i) {
