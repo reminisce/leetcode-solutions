@@ -26,7 +26,7 @@ public class GeneralizedAbbreviation {
         System.out.println();
 
         // recursion
-        abbreviations = app.genrateAbbreviationsRecursion(s);
+        abbreviations = app.generateAbbreviationsRecursion(s);
         for (String str : abbreviations) {
             System.out.print(str + " ");
         }
@@ -74,7 +74,7 @@ public class GeneralizedAbbreviation {
         return abbreviations;
     }
 
-    public List<String> genrateAbbreviationsRecursion(String s) {
+    public List<String> generateAbbreviationsRecursion(String s) {
         List<String> abbreviations = new ArrayList<>();
         if (null == s || s.isEmpty()) return abbreviations;
         generateAbbreviations(s, 0, 0, "", abbreviations);
