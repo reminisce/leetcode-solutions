@@ -14,7 +14,7 @@ public class MinimumOperationsPalindrome {
     }
 
     /**
-     * Performe Levenshtein distance on the string
+     * Perform Levenshtein distance on the string
      * and its reverse. The final solution will be
      * the minimum in the diagonal of the DP array
      * from bottom-left to top-right, as well as
