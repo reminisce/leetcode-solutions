@@ -11,7 +11,7 @@ in order.
 
 using namespace std;
 
-struct PairIteratorComparator {
+struct IteratorPairComparator {
     typedef vector<int>::iterator iterator;
     typedef pair<iterator, iterator> iterator_pair;
     bool operator()(const iterator_pair& it1, const iterator_pair& it2) const {
@@ -22,8 +22,8 @@ struct PairIteratorComparator {
 class MergeSortIterator
 {
 public:
-    typedef PairIteratorComparator::iterator iterator;
-    typedef PairIteratorComparator::iterator_pair iterator_pair;
+    typedef IteratorPairComparator::iterator iterator;
+    typedef IteratorPairComparator::iterator_pair iterator_pair;
     MergeSortIterator(vector<vector<int>>& arrays) {
         for (vector<int>& array : arrays) {
             if (!array.empty()) {
@@ -47,7 +47,7 @@ public:
     }
 
 private:
-    priority_queue<iterator_pair, vector<iterator_pair>, PairIteratorComparator> m_heap;
+    priority_queue<iterator_pair, vector<iterator_pair>, IteratorPairComparator> m_heap;
 };
 
 int main()
