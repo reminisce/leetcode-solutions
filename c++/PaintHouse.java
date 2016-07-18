@@ -28,6 +28,10 @@ public class PaintHouse {
         int[][] dp = new int[m][n];
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
+                if (i == 0) {
+                    dp[i][j] = costs[i][j];
+                    continue;
+                }
                 int preMinCost = Integer.MAX_VALUE;
                 for (int k = 0; k < n; ++k) {
                     if (k == j) continue;
