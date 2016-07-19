@@ -5,11 +5,11 @@
  * big integer subtraction to return the difference
  * of them.
  */
-public class BigInteger {
+public class BigIntegerUtil {
 
     public static void main(String[] args) {
         String a = "1000010", b = "1000010";
-        BigInteger app = new BigInteger();
+        BigIntegerUtil app = new BigIntegerUtil();
         System.out.println(a + " - " + b + " = " + app.subtract(a, b));
         System.out.println(a + " - " + b + " = " + (Integer.parseInt(a) - Integer.parseInt(b)));
     }
