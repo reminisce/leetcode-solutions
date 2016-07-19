@@ -22,7 +22,7 @@ public class BigIntegerUtil {
      * Two basic principles:
      * 1. Always do longer string subtract shorter string
      * 2. If two strings have equal lengths, always do
-     * bigger string subtract shorter string.
+     * bigger string integer subtracting smaller string integer.
      * @param a positive big integer string
      * @param b positive big integer string
      * @return
