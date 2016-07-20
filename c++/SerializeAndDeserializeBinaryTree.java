@@ -1,4 +1,4 @@
-import sun.awt.image.ImageWatched;
+import apple.laf.JRSUIUtils;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -45,7 +45,8 @@ public class SerializeAndDeserializeBinaryTree {
         root.right.left.left = new TreeNode(6);
         root.right.right = new TreeNode(5);
 
-        Codec app = new Codec();
+        // CodecLevelOrder app = new CodecLevelOrder();
+        CodecPreOrder app = new CodecPreOrder();
         String str = app.serialize(root);
         System.out.println(str);
         root = app.deserialize(str);
@@ -61,7 +62,7 @@ public class SerializeAndDeserializeBinaryTree {
      *     TreeNode(int x) { val = x; }
      * }
      */
-    public static class Codec {
+    public static class CodecLevelOrder {
 
         // Encodes a tree to a single string.
         public String serialize(TreeNode root) {
@@ -108,8 +109,43 @@ public class SerializeAndDeserializeBinaryTree {
             return root;
         }
     }
+
+    public static class CodecPreOrder {
+        public String serialize(TreeNode root) {
+            StringBuilder str = new StringBuilder();
+            serializeHelper(root, str);
+            return str.toString().trim();
+        }
+
+        private void serializeHelper(TreeNode node, StringBuilder str) {
+            if (null == node) {
+                str.append("# ");
+            } else {
+                str.append(Integer.toString(node.val) + " ");
+                serializeHelper(node.left, str);
+                serializeHelper(node.right, str);
+            }
+        }
+
+        public TreeNode deserialize(String data) {
+            if (data.isEmpty()) return null;
+            String[] tokens = data.trim().split(" ");
+            int[] index = new int[1];
+            TreeNode root = deserializeHelper(tokens, index);
+            return root;
+        }
+
+        public TreeNode deserializeHelper(String[] tokens, int[] index) {
+            int i = index[0]++;
+            if (tokens[i].equals("#")) return null;
+            TreeNode node = new TreeNode(Integer.parseInt(tokens[i]));
+            node.left = deserializeHelper(tokens, index);
+            node.right = deserializeHelper(tokens, index);
+            return node;
+        }
+    }
 }
 
-// Your Codec object will be instantiated and called as such:
-// Codec codec = new Codec();
+// Your CodecLevelOrder object will be instantiated and called as such:
+// CodecLevelOrder codec = new CodecLevelOrder();
 // codec.deserialize(codec.serialize(root));
