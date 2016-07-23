@@ -32,8 +32,8 @@
 public class PatchingArray {
 
     public static void main(String[] args) {
-        int[] nums = {1, 5, 10};
-        int n = 20;
+        int[] nums = {1, 2, 31, 33};
+        int n = 2147483647;
         PatchingArray app = new PatchingArray();
         System.out.println(app.minPatches(nums, n));
     }
@@ -53,10 +53,12 @@ public class PatchingArray {
         int miss = 1, res = 0, i = 0;
         while (miss <= n) {
             if (i < nums.length && nums[i] <= miss) {
+                if (Integer.MAX_VALUE - miss < nums[i]) break;
                 miss += nums[i++];
             } else {
-                miss += miss;
                 ++res;
+                if (Integer.MAX_VALUE - miss < miss) break;
+                miss += miss;
             }
         }
         return res;
