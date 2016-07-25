@@ -4,7 +4,7 @@
  * split the binary search tree into two
  * binary search trees whose node values
  * are less/equal and greater than the given
- * value.
+ * value. (G)
  */
 
 public class SplitBinarySearchTree {
