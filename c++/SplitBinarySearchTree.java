@@ -18,7 +18,6 @@ public class SplitBinarySearchTree {
         if (root.val <= val) {
             left = root;
             TreeNode[] nodes = splitBST(root.right, val);
-            nodes[0].right = left;
             root.right = nodes[0];
             right = nodes[1];
         } else {
