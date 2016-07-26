@@ -49,7 +49,7 @@ public class SearchForARange {
     }
 
     /**
-     * Search for the immediate next number greater than target.
+     * Search for the rightmost target or immediate next number greater than target.
      * In this, we cannot search for the right most target because
      * the loop may become never ending. For example, low = 1, high = 2,
      * nums[1] = nums[2] = target. If we always assign low = mid if
@@ -61,16 +61,17 @@ public class SearchForARange {
      * @return
      */
     private int searchRightMost(int[] nums, int target) {
-        int low = 0, high = nums.length;
-        while (low < high) {
+        int low = 0, high = nums.length - 1;
+        while (low <= high) {
             int mid = low + (high - low) / 2;
             if (nums[mid] > target) {
-                high = mid;
+                high = mid - 1;
             } else {
                 low = mid + 1;
             }
         }
 
-        return low-1;
+        if ((low >= 0 && low < nums.length && nums[low] != target) || low >= nums.length) return -1;
+        return low;
     }
 }
