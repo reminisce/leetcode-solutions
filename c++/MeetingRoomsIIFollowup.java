@@ -20,7 +20,7 @@ public class MeetingRoomsIIFollowup {
             intervals[i] = new Interval(startTimes[i], endTimes[i]);
         }
         MeetingRoomsIIFollowup app = new MeetingRoomsIIFollowup();
-        System.out.println(app.minMeetingRooms(intervals) + " is the busiest time");
+        System.out.println(app.minMeetingRooms2(intervals) + " is the busiest time");
     }
 
     public int minMeetingRooms(Interval[] intervals) {
@@ -72,19 +72,21 @@ public class MeetingRoomsIIFollowup {
         int activeMeetings = 0;
         int busiestTime = 0;
         int maxActiveMeetings = 0;
+        int i = 0;
         int j = 0;
-        for (int i = 0; i < n; ++i) {
-            while (j < n && startTimes[i] >= endTimes[j]) {
+        while (i < intervals.length && j < intervals.length) {
+            if (startTimes[i] <= endTimes[j]) {
+                ++activeMeetings;
+                System.out.println("At time " + startTimes[i] + ", " + activeMeetings + " meetings in progress");
+                ++i;
+                if (maxActiveMeetings < activeMeetings) {
+                    maxActiveMeetings = activeMeetings;
+                    busiestTime = startTimes[i];
+                }
+            } else {
                 ++j;
                 --activeMeetings;
             }
-            ++activeMeetings;
-
-            if (maxActiveMeetings < activeMeetings) {
-                maxActiveMeetings = activeMeetings;
-                busiestTime = startTimes[i];
-            }
-            System.out.println("At time " + startTimes[i] + ", " + activeMeetings + " meetings in progress");
         }
         return busiestTime;
     }
