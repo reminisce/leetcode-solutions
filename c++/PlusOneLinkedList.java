@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Created on 7/31/16.
  * Given a non-negative number represented
@@ -18,7 +20,7 @@
 public class PlusOneLinkedList {
 
     public static void main(String[] args) {
-        ListNode head = new ListNode(9);
+        ListNode head = new ListNode(1);
         head.next = new ListNode(9);
         head.next.next = new ListNode(9);
         PlusOneLinkedList app = new PlusOneLinkedList();
@@ -27,7 +29,43 @@ public class PlusOneLinkedList {
         app.printList(head);
     }
 
+    /**
+     * Another efficient solution is to find the first node that
+     * is not 9. Add one to it and set the all 9's on its right
+     * side to zero. If cannot find such a node, it means all
+     * the nodes are 9. Just add a new node(1) before the head.
+     * @param head
+     * @return
+     */
     public ListNode plusOne(ListNode head) {
+        if (null == head) return null;
+        ListNode p = null; // the first node that is not 9 from tail side
+        ListNode cur = head;
+        while (cur != null) {
+            if (cur.val != 9) p = cur;
+            cur = cur.next;
+        }
+
+        if (p == null) {
+            ListNode newHead = new ListNode(1);
+            newHead.next = head;
+            head = newHead;
+            p = head;
+        } else {
+            ++p.val;
+        }
+
+        while (p.next != null) {
+            p.next.val = 0;
+            p = p.next;
+        }
+
+        return head;
+    }
+
+
+
+    public ListNode plusOne2(ListNode head) {
         if (null == head) return null;
         head = reverse(head);
         ListNode p = head;
