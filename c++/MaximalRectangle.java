@@ -34,6 +34,7 @@ public class MaximalRectangle {
      * @return
      */
     public int maximalRectangle(char[][] matrix) {
+        if (null == matrix || matrix.length == 0 || matrix[0].length == 0) return 0;
         int res = 0, m = matrix.length, n = matrix[0].length;
         int[] height = new int[n];
         int[] left = new int[n];
