@@ -41,18 +41,19 @@ public:
             // Case 1: curSum equals k.
             if (curSum == k) {
                 maxLength = i + 1;
-            }
+            } else {
 
-            // Case 2: curSum-k is in the hash map
-            int remain = curSum - k;
-            auto it = sumMap.find(remain);
-            if (it != sumMap.end()) {
-                maxLength = max(maxLength, i - it->second);
-            }
+                // Case 2: curSum-k is in the hash map
+                int remain = curSum - k;
+                auto it = sumMap.find(remain);
+                if (it != sumMap.end()) {
+                    maxLength = max(maxLength, i - it->second);
+                }
 
-            // Store curSum in sumMap if no smaller index is found
-            if (!sumMap.count(curSum)) {
-                sumMap[curSum] = i;
+                // Store curSum in sumMap if no smaller index is found
+                if (!sumMap.count(curSum)) {
+                    sumMap[curSum] = i;
+                }
             }
         }
 
