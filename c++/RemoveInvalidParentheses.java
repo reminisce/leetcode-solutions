@@ -15,6 +15,13 @@ import java.util.*;
  */
 
 public class RemoveInvalidParentheses {
+
+    public static void main(String[] args) {
+        String s = "()())()";
+        RemoveInvalidParentheses app = new RemoveInvalidParentheses();
+        System.out.println(app.removeInvalidParentheses(s).toString());
+    }
+
     public List<String> removeInvalidParentheses(String s) {
         List<String> res = new ArrayList<>();
         Set<String> visited = new HashSet<>();
@@ -30,21 +37,25 @@ public class RemoveInvalidParentheses {
         boolean found = false;
 
         while (!queue.isEmpty()) {
-            String str = queue.poll();
-            if (visited.contains(str)) continue;
-            visited.add(str);
-            if (isValid(str)) {
-                res.add(str);
-                found = true;
-            }
-            if (found) continue;
-            for (int i = 0; i < str.length(); ++i) {
-                if (str.charAt(i) != '(' && str.charAt(i) != ')') continue;
-                String t = str.substring(0, i) + str.substring(i+1);
-                if (!visited.contains(t)) {
-                    queue.offer(t);
+            int sz = queue.size();
+            for (int i = 0; i < sz; ++i) {
+                String str = queue.poll();
+                visited.add(str);
+                if (isValid(str)) {
+                    res.add(str);
+                    found = true;
+                }
+                if (found) continue;
+                for (int j = 0; j < str.length(); ++j) {
+                    if (str.charAt(j) != '(' && str.charAt(j) != ')') continue;
+                    String t = str.substring(0, j) + str.substring(j + 1);
+                    if (!visited.contains(t)) {
+                        visited.add(t);
+                        queue.offer(t);
+                    }
                 }
             }
+            if (found) break;
         }
         return res;
     }
