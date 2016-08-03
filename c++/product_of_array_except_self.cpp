@@ -1,41 +1,28 @@
-#include <cstdlib>
+/**
+ * Given a vector of n elements,
+ * choose k elements (k < n) from
+ * it such that every element in
+ * the vector is considered uniformly.
+ */
+
 #include <vector>
-#include <iostream>
 
 using namespace std;
 
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        if (nums.empty()) {
-            return nums;
-        }
-        
-        vector<int> res(nums.size());
-        
-        for (int i = 0, prod = 1; i < (int)nums.size(); prod *= nums[i++]) {
-            res[i] = prod;
-        }
-        
-        for (int i = (int)nums.size()-1, prod = 1; i >= 0; prod *= nums[i--]) {
+        int n = nums.size();
+        vector<int> res(n, 1); 
+        for (int i = 1; i < n; ++i) {
+            res[i] = res[i-1]*nums[i-1];
+        }   
+
+        int prod = 1;
+        for (int i = n-2; i >= 0; --i) {
+            prod *= nums[i+1];
             res[i] *= prod;
         }
-        
         return res;
     }
 };
-
-int main(int argc, char** argv) {
-
-    vector<int> nums;
-    nums.push_back(0);
-    nums.push_back(1);
-    Solution sol;
-    nums = sol.productExceptSelf(nums);
-    for (size_t i = 0; i < nums.size(); ++i) {
-        cout << nums[i] << ' ';
-    }
-    cout << endl;
-    return 0;
-}
-
