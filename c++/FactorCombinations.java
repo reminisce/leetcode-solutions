@@ -70,6 +70,11 @@ public class FactorCombinations {
             return;
         }
 
+        /**
+         * i can be equal to any factor of original number, excluding the
+         * original number itself. That's why we need i < originalNum to
+         * exclude the original number.
+         */
         for (int i = start; i <= currrentNum && i < originalNum; ++i) {
             if (currrentNum % i == 0) {
                 combo.add(i);
