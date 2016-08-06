@@ -24,11 +24,16 @@
  * Maximum amount of money the thief can rob = 4 + 5 = 9.
  */
 
+#include <utility>
+#include <unordered_map>
+
+using namespace std;
+
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
@@ -42,8 +47,8 @@ public:
 
     /**
      * post order traversal, the return value
-     * first is not robbing this node,
-     * second is robbing this node.
+     * first is robbing this node,
+     * second is not robbing this node.
      */
     pair<int, int> robHelper(TreeNode* node) {
         if (!node) return {0, 0};
