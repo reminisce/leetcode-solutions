@@ -40,7 +40,7 @@ public class RemoveInvalidParentheses {
             int sz = queue.size();
             for (int i = 0; i < sz; ++i) {
                 String str = queue.poll();
-                visited.add(str);
+                // visited.add(str);
                 if (isValid(str)) {
                     res.add(str);
                     found = true;

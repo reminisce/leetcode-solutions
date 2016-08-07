@@ -41,37 +41,40 @@ root->smaller + insert(root->right, value) + (root->val!=value? 1 : 0).
 
 using namespace std;
 
-struct Node {
+struct BinarySearchTreeNode {
     int val;
     int smaller; // #smaller nodes on its left
-    Node *left;
-    Node *right;
-    Node(int x, int s) : val(x), smaller(s), left(NULL), right(NULL) {}
+    int duplicate;
+    BinarySearchTreeNode *left;
+    BinarySearchTreeNode *right;
+    BinarySearchTreeNode(int x) : val(x), smaller(0), duplicate(1), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
 public:
     vector<int> countSmaller(vector<int>& nums) {
         vector<int> rs(nums.size());
-        Node* root = nullptr;
+        BinarySearchTreeNode* root = nullptr;
         for (int i = (int)nums.size() - 1; i >= 0; --i) {
-            rs[i] = insert(root, nums[i]);
+            root = insertRecursive(root, nums[i], 0, rs, i);
         }
         return rs;
     }
 
-    int insert(Node*& root, int val) {
-        if (!root) {
-            root = new Node(val, 0);
-            return 0;
-        }
-
-        if (root->val > val) {
-            ++root->smaller;
-            return insert(root->left, val);
+    BinarySearchTreeNode* insertRecursive(BinarySearchTreeNode* node, int val, int smaller, vector<int>& res, int idx) {
+        if (!node) {
+            node = new BinarySearchTreeNode(val);
+            res[idx] = smaller;
+        } else if (node->val == val) {
+            ++node->duplicate;
+            res[idx] = smaller + node->smaller;
+        } else if (node->val > val) {
+            ++node->smaller;
+            node->left = insertRecursive(node->left, val, smaller, res, idx);
         } else {
-            return insert(root->right, val) + root->smaller + (root->val != val? 1 : 0);
+            node->right = insertRecursive(node->right, val, smaller+node->duplicate+node->smaller, res, idx);
         }
+        return node;
     }
 };
 
