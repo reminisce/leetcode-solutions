@@ -15,11 +15,28 @@ What if you could modify the BST node's structure?
 The optimal runtime complexity is O(height of BST).
 */
 
+/**
+ * Answer to the follow-up:
+ * We can add another data member in the tree node to record
+ * the nodes in its left subtree. Then, we can decide whether
+ * we want to recurse to the left subtree or the right.
+ * Such a bst is called order statistic tree.
+ * https://en.wikipedia.org/wiki/Order_statistic_tree
+ * All operations that modify the tree must adjust this information
+ * to preserve the invariant that
+ * size[x] = size[left[x]] + size[right[x]] + 1
+ * Such type of tree supports two additional operations beyond
+ * insertion, lookup, and deletion.
+ * Select(i) -- find the i-th smallest element stored in the tree
+ * Rank(x) -- find the rank of element x in the tree, i.e. its
+ * index in the sorted list of elements of the tree.
+ */
+
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
