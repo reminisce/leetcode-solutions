@@ -15,7 +15,7 @@ import java.util.Queue;
  *
  * [
  * "0010",
- * "0110",
+ * "0111",
  * "0100"
  * ]
  * and x = 0, y = 2,
@@ -26,11 +26,12 @@ import java.util.Queue;
 public class SmallestRectangleEnclosingBlackPixels {
 
     public static void main(String[] args) {
-        int[][] image = {{0, 0, 1, 0},
-                {0, 1, 1, 0},
-                {0, 1, 0, 0}};
+        int[][] image = {{0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0},
+                {0, 1, 0, 0, 0},
+                {0, 0, 1, 0, 0}};
         SmallestRectangleEnclosingBlackPixels app = new SmallestRectangleEnclosingBlackPixels();
-        System.out.println(app.minAreaBinarySearch(image, 0, 2));
+        System.out.println(app.minAreaBinarySearch(image, 1, 2));
     }
 
     /**
@@ -45,16 +46,24 @@ public class SmallestRectangleEnclosingBlackPixels {
     public int minAreaBinarySearch(int[][] image, int x, int y) {
         int m = image.length;
         int n = image[0].length;
-        int left = binarySearch(image, 0, y, 0, m, true, true);
-        int right = binarySearch(image, y+1, n, 0, m, true, false);
-        int top = binarySearch(image, 0, x, left, right, false, true);
-        int bottom = binarySearch(image, x+1, m, left, right, false, false);
+        int left = binarySearch(image, 0, y, 0, m-1, true, true);
+        // consider the special case that there are no white pixels
+        // on the right side of the projected black pixels on the
+        // bottom row. Need to add one more column as white pixels
+        // to do the binary search, so the initial high = n, not n-1.
+        int right = binarySearch(image, y+1, n, 0, m-1, true, false);
+        int top = binarySearch(image, 0, x, 0, n-1, false, true);
+        // consider the special case that there are no white pixels
+        // on the bottom side of the projected black pixels on the
+        // left column. Need to add one more row as white pixels
+        // to do the binary search, so the initial high = m, not m-1.
+        int bottom = binarySearch(image, x+1, m, left, right-1, false, false);
         return (right - left) * (bottom - top);
     }
 
     /**
      * binary search for leftmost black and white pixels in row
-     * binary search for topmost black and white pixels in column
+     * binary search for topmost bla in column
      * @param image input image
      * @param low binary search lowest index
      * @param high binary search highest index
@@ -64,6 +73,30 @@ public class SmallestRectangleEnclosingBlackPixels {
      * @param searchForBlackPixel
      * @return
      */
+    private int binarySearch(int[][] image, int low, int high, int min, int max,
+                             boolean isHorizontal, boolean searchForBlackPixel) {
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            boolean foundBlackPixel = false;
+            for (int k = min; k <= max; ++k) {
+                if ((isHorizontal? image[k][mid] : image[mid][k]) == 1) {
+                    foundBlackPixel = true;
+                    break;
+                }
+            }
+            if (searchForBlackPixel) {
+                if (foundBlackPixel) high = mid;
+                else low = mid + 1;
+            } else {
+                if (foundBlackPixel) low = mid + 1;
+                else high = mid;
+            }
+        }
+
+        return low;
+    }
+
+    /*
     private int binarySearch(int[][] image, int low, int high, int min, int max,
                              boolean isHorizontal, boolean searchForBlackPixel) {
         while (low < high) {
@@ -83,6 +116,7 @@ public class SmallestRectangleEnclosingBlackPixels {
         }
         return low;
     }
+    */
 
     public int minAreaBFS(int[][] image, int x, int y) {
         if (image == null || image.length == 0 || image[0].length == 0) return 0;
