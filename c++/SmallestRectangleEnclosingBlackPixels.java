@@ -26,7 +26,9 @@ import java.util.Queue;
 public class SmallestRectangleEnclosingBlackPixels {
 
     public static void main(String[] args) {
-        int[][] image = {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}};
+        int[][] image = {{0, 0, 1, 0},
+                {0, 1, 1, 0},
+                {0, 1, 0, 0}};
         SmallestRectangleEnclosingBlackPixels app = new SmallestRectangleEnclosingBlackPixels();
         System.out.println(app.minAreaBinarySearch(image, 0, 2));
     }
@@ -43,43 +45,43 @@ public class SmallestRectangleEnclosingBlackPixels {
     public int minAreaBinarySearch(int[][] image, int x, int y) {
         int m = image.length;
         int n = image[0].length;
-        int left = searchColumns(image, 0, y, 0, m, true);
-        int right = searchColumns(image, y+1, n-1, 0, m, false);
-        int top = searchRows(image, 0, x, left, right, true);
-        int bottom = searchRows(image, x+1, m-1, left, right, false);
+        int left = binarySearch(image, 0, y, 0, m, true, true);
+        int right = binarySearch(image, y+1, n, 0, m, true, false);
+        int top = binarySearch(image, 0, x, left, right, false, true);
+        int bottom = binarySearch(image, x+1, m, left, right, false, false);
         return (right - left) * (bottom - top);
     }
 
     /**
-     * Find the left and right most column of the black pixels.
-     * @param left
-     * @param right
-     * @param top
-     * @param bottom
-     * @param opt opt=true means finding the left-most column of black pixels; opt=false
-     *            means finding the left-most column of white pixels
+     * binary search for leftmost black and white pixels in row
+     * binary search for topmost black and white pixels in column
+     * @param image input image
+     * @param low binary search lowest index
+     * @param high binary search highest index
+     * @param min
+     * @param max
+     * @param isHorizontal
+     * @param searchForBlackPixel
      * @return
      */
-    private int searchColumns(int[][] image, int left, int right, int top, int bottom, boolean opt) {
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-            int k = top;
-            while (k <= bottom && image[k][mid] == '0') ++k;
-            if ((k <= bottom) == opt) right = mid;
-            else left = mid + 1;
+    private int binarySearch(int[][] image, int low, int high, int min, int max,
+                             boolean isHorizontal, boolean searchForBlackPixel) {
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            boolean foundBlackPixel = false;
+            for (int k = min; k < max; ++k) {
+                if ((isHorizontal? image[k][mid] : image[mid][k]) == 1) {
+                    foundBlackPixel = true;
+                    break;
+                }
+            }
+            if (searchForBlackPixel == foundBlackPixel) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
         }
-        return left;
-    }
-
-    private int searchRows(int[][] image, int top, int bottom, int left, int right, boolean opt) {
-        while (top < bottom) {
-            int mid = top + (bottom - top) / 2;
-            int k = left;
-            while (k <= right && image[mid][k] == '0') ++k;
-            if ((k <= right) == opt) bottom = mid;
-            else top = mid + 1;
-        }
-        return top;
+        return low;
     }
 
     public int minAreaBFS(int[][] image, int x, int y) {
