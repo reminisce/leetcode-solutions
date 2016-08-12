@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created on 7/1/16.
@@ -40,7 +42,7 @@ public class FindLeavesOfBinaryTree {
         root.left.right = new TreeNode(5);
 
         FindLeavesOfBinaryTree app = new FindLeavesOfBinaryTree();
-        List<List<Integer>> leafList = app.findLeaves(root);
+        List<List<Integer>> leafList = app.findLeavesDFS(root);
         for (List<Integer> leaves : leafList) {
             System.out.println(leaves.toString());
         }
@@ -66,5 +68,26 @@ public class FindLeavesOfBinaryTree {
         node.left = findLeavesHelper(node.left, leaves);
         node.right = findLeavesHelper(node.right, leaves);
         return node;
+    }
+
+    public List<List<Integer>> findLeavesDFS(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        findLeavesHelperDFS(root, res);
+        return res;
+    }
+
+    /**
+     * @param node
+     * @param res
+     * @return the depth of the current node
+     */
+    private int findLeavesHelperDFS(TreeNode node, List<List<Integer>> res) {
+        if (null == node) return -1;
+        int depth = 1 + Math.max(findLeavesHelperDFS(node.left, res), findLeavesHelperDFS(node.right, res));
+        if (depth >= res.size()) {
+            res.add(new ArrayList<>());
+        }
+        res.get(depth).add(node.val);
+        return depth;
     }
 }
