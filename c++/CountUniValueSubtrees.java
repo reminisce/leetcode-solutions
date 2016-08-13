@@ -17,18 +17,36 @@
  */
 
 public class CountUniValueSubtrees {
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(5);
+        root.left = new TreeNode(1);
+        root.left.left = new TreeNode(5);
+        root.left.right = new TreeNode(5);
+        root.right = new TreeNode(5);
+        root.right.right = new TreeNode(5);
+        CountUniValueSubtrees app = new CountUniValueSubtrees();
+        System.out.println(app.countUniValueSubtrees(root));
+    }
+
     public int countUniValueSubtrees(TreeNode root) {
         int[] res = new int[1];
-        countHelper(root, root.val, res);
+        countHelper(root, res);
         return res[0];
     }
 
-    private boolean countHelper(TreeNode node, int val, int[] res) {
+    private boolean countHelper(TreeNode node, int[] res) {
         if (null == node) return true;
-        if (!countHelper(node.left, node.val, res) || !countHelper(node.right, node.val, res)) {
-            return false;
+        boolean isUniValTreeLeft = countHelper(node.left, res);
+        boolean isUniValTreeRight = countHelper(node.right, res);
+        if (isSame(node, node.left, isUniValTreeLeft) && isSame(node, node.right, isUniValTreeRight)) {
+            ++res[0];
+            return true;
         }
-        ++res[0];
-        return node.val == val;
+        return false;
+    }
+
+    private boolean isSame(TreeNode parent, TreeNode child, boolean isChildUniValTree) {
+        return child == null || (parent.val == child.val && isChildUniValTree);
     }
 }
