@@ -34,6 +34,10 @@ public class PaintFence {
      *    there are k*(k-1) ways to paint post 3 with the same color as post 2.
      * So in total, there are [k*(k-1)+k]*(k-1)] + k*(k-1) ways to paint three posts.
      * Keep going...
+     * Denote s[i] as the number of painting up to post i with the same color as post i-1
+     * Denote d[i] as the number of painting up to post i with different color from post i-1
+     * d[i] = (k-1)*(s[i-1]+d[i-1])
+     * s[i] = d[i-1]
      * @param n
      * @param k
      * @return
