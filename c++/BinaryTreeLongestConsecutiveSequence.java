@@ -44,14 +44,23 @@ public class BinaryTreeLongestConsecutiveSequence {
     }
 
     public int longestConsecutive(TreeNode root) {
-        return longestConsecutiveHelper(root, null, 0);
+        int[] res = new int[1];
+        longestConsecutive(root, res);
+        return res[0];
     }
 
-    private int longestConsecutiveHelper(TreeNode curNode, TreeNode parNode, int len) {
-        if (curNode == null) return len;
-        if (parNode != null && curNode.val == parNode.val+1) ++len;
-        else len = 1;
-        return Math.max(len, Math.max(longestConsecutiveHelper(curNode.left, curNode, len),
-                longestConsecutiveHelper(curNode.right, curNode, len)));
+    private int longestConsecutive(TreeNode root, int[] res) {
+        if (null == root) return 0;
+        int leftLength = longestConsecutive(root.left);
+        int rightLength = longestConsecutive(root.right);
+        int curLength = 1;
+        if (root.left != null && root.val + 1 == root.left.val) {
+            curLength = Math.max(curLength, 1+leftLength);
+        }
+        if (root.right != null && root.val + 1 == root.right.val) {
+            curLength = Math.max(curLength, 1+rightLength);
+        }
+        res[0] = Math.max(leftLength, Math.max(rightLength, Math.max(res[0], curLength)));
+        return curLength;
     }
 }
