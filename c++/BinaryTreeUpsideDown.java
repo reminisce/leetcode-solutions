@@ -1,3 +1,5 @@
+import com.sun.source.tree.Tree;
+
 /**
  * Created on 6/12/16.
  * Given a binary tree where all the right nodes are either leaf nodes with a
@@ -17,14 +19,32 @@
  *
  * return the root of the binary tree [4,5,2,#,#,3,1].
  *
+ *
+ *     1
+ *    /
+ *   2--3
+ *  /
+ * 4--5
+ *
  *     4
  *    / \
  *   5  2
- *  / \
- * 3  1
+ *     / \
+ *    3  1
  */
 
 public class BinaryTreeUpsideDown {
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.right = new TreeNode(3);
+        BinaryTreeUpsideDown app = new BinaryTreeUpsideDown();
+        TreeNode newRoot = app.upsideDownBinaryTree(root);
+        System.out.println(newRoot.val);
+    }
 
     /**
      * Recursion. For a node, make its left child the new root,
@@ -35,23 +55,23 @@ public class BinaryTreeUpsideDown {
      * @return
      */
     public TreeNode upsideDownBinaryTree(TreeNode root) {
-        if (null == root || null == root.left) return root;
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-        TreeNode newRoot = upsideDownBinaryTree(left);
-        left.left = right;
-        left.right = root;
-        root.left = null;
-        root.right = null;
+        return upsideDownBinaryTreeRecursion(root, null);
+    }
+
+    private TreeNode upsideDownBinaryTreeRecursion(TreeNode node, TreeNode parent) {
+        if (null == node) return parent;
+        TreeNode newRoot = upsideDownBinaryTreeRecursion(node.left, node);
+        node.left = (parent == null? null : parent.right);
+        node.right = parent;
         return newRoot;
     }
 
-    public TreeNode upsideDownBinaryTree2(TreeNode root) {
-        TreeNode curNode = null, prevNode = null, nextNode = null, tmp = null;
+    public TreeNode upsideDownBinaryTreeIterative(TreeNode root) {
+        TreeNode curNode = null, prevNode = null, tmpRightNode = null;
         while (curNode != null) {
-            nextNode = curNode.left;
-            curNode.left = tmp;
-            tmp = curNode.right;
+            TreeNode nextNode = curNode.left;
+            curNode.left = tmpRightNode;
+            tmpRightNode = curNode.right;
             curNode.right = prevNode;
             prevNode = curNode;
             curNode = nextNode;
