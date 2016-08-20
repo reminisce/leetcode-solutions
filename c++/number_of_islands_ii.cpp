@@ -55,7 +55,7 @@ public:
         int count = 0;
         vector<vector<int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (int i = 0; i < positions.size(); ++i) {
-            int curId = positions[i].first * m + positions[i].second;
+            int curId = positions[i].first * n + positions[i].second;
             root[curId] = curId;
             ++count;
             for (const vector<int>& dir : dirs) {
