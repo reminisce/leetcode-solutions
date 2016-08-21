@@ -20,27 +20,20 @@ public:
         if (n <= 0) return res;
 
         queue<string> q;
+        int curEvenLen = 0;
+        q.push("");
+
+        int curOddLen = 1;
         q.push("0");
         q.push("1");
         q.push("8");
-        int curOddLen = 1;
-
-        int curEvenLen = 0;
-        if (n >= 2) {
-            q.push("00");
-            q.push("11");
-            q.push("69");
-            q.push("88");
-            q.push("96");
-            curEvenLen = 2;
-        }
 
         while (curOddLen <= n || curEvenLen <= n) {
             int sz = q.size();
             for (int i = 0; i < sz; ++i) {
                 string str = q.front();
                 q.pop();
-                if (str.size() <= n && (str.size() == 1 || str[0] != 0)) {
+                if (!str.empty() && str.size() <= n && (str.size() == 1 || str[0] != 0)) {
                     res.push_back(str);
                 }
                 if (str.size() + 2 <= n) {
@@ -62,7 +55,7 @@ public:
 int main()
 {
     Solution sol;
-    int n = 4;
+    int n = 3;
     vector<string> res = sol.findStrobogrammatic(n);
     for (string num : res) {
         cout << num << ' ';
