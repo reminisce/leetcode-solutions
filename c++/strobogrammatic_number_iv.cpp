@@ -19,56 +19,40 @@ public:
         vector<string> res;
         if (n <= 0) return res;
 
-        queue<string> oddQueue;
-        oddQueue.push("0");
-        oddQueue.push("1");
-        oddQueue.push("8");
+        queue<string> q;
+        q.push("0");
+        q.push("1");
+        q.push("8");
         int curOddLen = 1;
 
-        queue<string> evenQueue;
-        evenQueue.push("00");
-        evenQueue.push("11");
-        evenQueue.push("69");
-        evenQueue.push("88");
-        evenQueue.push("96");
-        int curEvenLen = 2;
+        int curEvenLen = 0;
+        if (n >= 2) {
+            q.push("00");
+            q.push("11");
+            q.push("69");
+            q.push("88");
+            q.push("96");
+            curEvenLen = 2;
+        }
 
-        while ((n % 2 == 1 && curOddLen <= n) || (n % 2 == 0 && curEvenLen <= n)) {
+        while (curOddLen <= n || curEvenLen <= n) {
+            int sz = q.size();
+            for (int i = 0; i < sz; ++i) {
+                string str = q.front();
+                q.pop();
+                if (str.size() <= n && (str.size() == 1 || str[0] != 0)) {
+                    res.push_back(str);
+                }
+                if (str.size() + 2 <= n) {
+                    q.push('0' + str + '0');
+                    q.push('1' + str + '1');
+                    q.push('6' + str + '9');
+                    q.push('8' + str + '8');
+                    q.push('9' + str + '6');
+                }
+            }
             curOddLen += 2;
-            int sz = oddQueue.size();
-            for (int i = 0; i < sz; ++i) {
-                string str = oddQueue.front();
-                oddQueue.pop();
-                if (str.size() == 1 || str[0] != '0') {
-                    res.push_back(str);
-                }
-                if (curOddLen <= n) {
-                    oddQueue.push('0' + str + '0');
-                    oddQueue.push('1' + str + '1');
-                    oddQueue.push('6' + str + '9');
-                    oddQueue.push('8' + str + '8');
-                    oddQueue.push('9' + str + '6');
-                }
-            }
-            if (n % 2 == 1 && curOddLen > n) break;
-
             curEvenLen += 2;
-            sz = evenQueue.size();
-            for (int i = 0; i < sz; ++i) {
-                string str = evenQueue.front();
-                evenQueue.pop();
-                if (str[0] != '0') {
-                    res.push_back(str);
-                }
-                if (curEvenLen <= n) {
-                    evenQueue.push('0' + str + '0');
-                    evenQueue.push('1' + str + '1');
-                    evenQueue.push('6' + str + '9');
-                    evenQueue.push('8' + str + '8');
-                    evenQueue.push('9' + str + '6');
-                }
-            }
-            if (n % 2 == 0 && curEvenLen > n) break;
         }
 
         return res;
@@ -78,7 +62,7 @@ public:
 int main()
 {
     Solution sol;
-    int n = 3;
+    int n = 4;
     vector<string> res = sol.findStrobogrammatic(n);
     for (string num : res) {
         cout << num << ' ';
