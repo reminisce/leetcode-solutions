@@ -24,7 +24,7 @@ public:
         for (size_t i = 0; i < points.size(); ++i) {
             int duplicate = 1;
             unordered_map<double, int> slope2NumMap;
-            for (size_t j = 0; j < points.size(); ++j) {
+            for (size_t j = i+1; j < points.size(); ++j) {
                 if (j == i) continue;
 
                 if (points[i].x == points[j].x && points[i].y == points[j].y) {
