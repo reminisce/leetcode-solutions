@@ -25,7 +25,36 @@ using namespace std;
 
 class Solution {
 public:
+
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> subsets;
+        sort(nums.begin(), nums.end());
+        subsets.push_back({});
+        if (nums.empty()) return subsets;
+        // preSize record the number of subsets
+        // two rounds before the current one if
+        // the current num is a duplicate of
+        // the previous num
+        int preSize = subsets.size();
+        int preNum = nums[0];
+
+        for (int num : nums) {
+            if (preNum != num) {
+                preNum = num;
+                preSize = subsets.size();
+            }
+            int sz = subsets.size();
+            for (int i = sz-preSize; i < sz; ++i) {
+                auto subset = subsets[i];
+                subset.push_back(num);
+                subsets.push_back(subset);
+            }
+        }
+
+        return subsets;
+    }
+
+    vector<vector<int>> subsetsWithDupRecursive(vector<int>& nums) {
         vector<vector<int>> allSubsets;
         vector<int> subset;
         sort(nums.begin(), nums.end());
