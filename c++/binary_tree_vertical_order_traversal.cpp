@@ -21,6 +21,7 @@ The output of print this tree vertically will be:
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -33,6 +34,23 @@ struct TreeNode {
 
 class Solution {
 public:
+    vector<vector<int>> verticalOrderDFS(TreeNode* root) {
+        map<int, vector<int>> offset2ValuesMap;
+        verticalOrderDFSHelper(root, 0, offset2ValuesMap);
+        vector<vector<int>> res;
+        for (auto& entry : offset2ValuesMap) {
+            res.push_back(entry.second);
+        }
+        return res;
+    }
+
+    void verticalOrderDFSHelper(TreeNode* node, int curOffset, map<int, vector<int>>& offset2ValuesMap) {
+        if (!node) return;
+        offset2ValuesMap[curOffset].push_back(node->val);
+        verticalOrderDFSHelper(node->left, curOffset-1, offset2ValuesMap);
+        verticalOrderDFSHelper(node->right, curOffset+1, offset2ValuesMap);
+    }
+#if 0
     vector<vector<int>> verticalOrder(TreeNode* root) {
         int minDist = 0;
         int maxDist = 0;
@@ -58,7 +76,6 @@ public:
         verticalOrderHelper(root->left, col, offset, d-1);
         verticalOrderHelper(root->right, col, offset, d+1);
     }
-
     /**
      * Find the horizontal distance from the leftmost and
      * rightmost nodes to the root, respectively. The
@@ -89,6 +106,7 @@ public:
         }
         maxDist = d;
     }
+#endif
 };
 
 
@@ -104,7 +122,7 @@ int main()
     root->right->right = new TreeNode(7);
     root->right->right->right = new TreeNode(9);
     Solution sol;
-    vector<vector<int>> rs = sol.verticalOrder(root);
+    vector<vector<int>> rs = sol.verticalOrderDFS(root);
 
     for (const vector<int>& vec : rs) {
         for (int val : vec) {
