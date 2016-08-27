@@ -94,19 +94,17 @@ public:
 
 int main()
 {
-    vector<TreeNode*> nodes;
-    for (int i = 0; i < 7; ++i) {
-        nodes.push_back(new TreeNode(i));
-    }
-    nodes[1]->left = nodes[0];
-    nodes[1]->right = nodes[3];
-    nodes[3]->left = nodes[2];
-    nodes[4]->left = nodes[1];
-    nodes[4]->right = nodes[5];
-    nodes[5]->right = nodes[6];
-
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    root->right = new TreeNode(3);
+    root->right->left = new TreeNode(6);
+    root->right->left->right = new TreeNode(8);
+    root->right->right = new TreeNode(7);
+    root->right->right->right = new TreeNode(9);
     Solution sol;
-    vector<vector<int>> rs = sol.verticalOrder(nodes[4]);
+    vector<vector<int>> rs = sol.verticalOrder(root);
 
     for (const vector<int>& vec : rs) {
         for (int val : vec) {
