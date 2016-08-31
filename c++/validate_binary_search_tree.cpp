@@ -7,7 +7,10 @@ The left subtree of a node contains only nodes with keys less than the node's ke
 The right subtree of a node contains only nodes with keys greater than the node's key.
 Both the left and right subtrees must also be binary search trees.
 */
+#include <limits>
 #include <climits>
+
+using namespace std;
 
 struct TreeNode {
     int val;
@@ -18,6 +21,18 @@ struct TreeNode {
 
 class Solution {
 public:
+
+    bool isValidBST3(TreeNode* root) {
+        return isValidBST3Helper(root, numeric_limits<long>::min(), numeric_limits<long>::max());
+    }
+
+    bool isValidBST3Helper(TreeNode* node, long lowerBound, long upperBound) {
+        if (!node) return true;
+        return (node->val > lowerBound && node->val < upperBound) && 
+        isValidBST3Helper(node->left, lowerBound, node->val) &&
+        isValidBST3Helper(node->right, node->val, upperBound);
+    }
+
     bool isValidBST(TreeNode* root) {        
         if (!root) {
             return true;
