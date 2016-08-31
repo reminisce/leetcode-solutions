@@ -17,8 +17,8 @@ import java.util.Queue;
 public class SchedulingTasks {
 
     public static void main(String[] args) {
-        String s = "12323";
-        int k = 3;
+        String s = "121";
+        int k = 2;
         SchedulingTasks app = new SchedulingTasks();
         System.out.println(app.findTotalTime(s, k));
     }
@@ -28,12 +28,16 @@ public class SchedulingTasks {
         Map<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < tasks.length(); ++i) {
             if (!map.containsKey(tasks.charAt(i))) {
-                ++totalTime;
+                map.put(tasks.charAt(i),++totalTime);
             } else {
-                int idx = map.get(tasks.charAt(i));
-                totalTime += (i-idx-1 > cooldown? 1 : cooldown-(i-idx-1));
+                int lastFinishTime = map.get(tasks.charAt(i));
+                if (totalTime - lastFinishTime >= cooldown) {
+                    map.put(tasks.charAt(i), ++totalTime);
+                } else {
+                    totalTime = cooldown + lastFinishTime + 1;
+                    map.put(tasks.charAt(i), totalTime);
+                }
             }
-            map.put(tasks.charAt(i), i);
         }
         return totalTime;
     }
