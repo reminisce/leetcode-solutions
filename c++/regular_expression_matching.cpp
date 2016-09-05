@@ -27,24 +27,30 @@ using namespace std;
 class Solution {
 public:
     bool isMatch(string s, string p) {
+        // when p is empty
         if (p.empty()) return s.empty();
 
+        // when p has only one character
         if (p.size() == 1) {
             return s.size() == 1 && (s[0] == p[0] || p[0] == '.');
         }
 
+        // when p's second character is not a '*'
         if (p[1] != '*') {
             if (s.empty()) return false;
             return (s[0] == p[0] || p[0] == '.') && isMatch(s.substr(1), p.substr(1));
         }
 
         // For case isMatch("aab", "a*b") and isMatch("aab", ".*")
+        // when p's second character is a '*', try to match s
+        // with one p[0], two p[0], ..., until the end of s
         while (!s.empty() && (s[0] == p[0] || p[0] == '.')) {
             if (isMatch(s, p.substr(2))) return true;
             s = s.substr(1);
         }
 
         // For case isMatch("aab", "b*aab")
+        // try to match s without p[0]
         return isMatch(s, p.substr(2));
     }
 };
